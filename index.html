@@ -19,6 +19,7 @@ h1{font-size:1.8rem;margin:.2rem 0 .8rem}
 .blank{aspect-ratio:1}
 .c{position:relative;aspect-ratio:1;background:var(--cell);border:2px solid var(--ink);border-radius:.3rem}
 .c.hl{background:var(--hl)}
+.c.done{background:color-mix(in srgb,var(--good) 35%,var(--cell))}
 .c.wrong input{color:var(--bad)}
 .n{position:absolute;top:1px;left:3px;font-size:.6rem;font-weight:700;color:var(--muted);pointer-events:none}
 .c input{width:100%;height:100%;border:0;background:transparent;color:var(--ink);text-align:center;font:inherit;font-weight:700;font-size:1.2rem;text-transform:uppercase;padding:.45rem 0 0;border-radius:.3rem;caret-color:transparent}
@@ -34,20 +35,35 @@ h2{font-size:1.1rem;margin:0 0 .4rem}
 ol{list-style:none;margin:0;padding:0}
 li{padding:.4rem .5rem;border-radius:.5rem;cursor:pointer;line-height:1.3}
 li.on{background:var(--hl)}
+li.done{opacity:.55;text-decoration:line-through}
 li b{display:inline-block;min-width:1.6rem}
+#jump{margin-bottom:.8rem}
+#trivia{margin-top:2.5rem;padding-top:1.5rem;border-top:2px solid var(--ink)}
+#trivia h2{font-size:1.5rem;margin:0 0 .6rem}
+.tstat{display:flex;justify-content:space-between;font-weight:700;margin-bottom:.8rem}
+#tq{font-size:1.15rem;line-height:1.4;margin:0 0 1rem}
+#ta{display:grid;gap:.6rem}
+#ta button{text-align:left;background:var(--cell)}
+#ta button:hover:not(:disabled){background:var(--hl)}
+#ta button.correct{background:var(--good);color:var(--bg)}
+#ta button.wrong{background:var(--bad);color:var(--bg)}
+#tfb{min-height:1.5rem;font-weight:700;margin:.8rem 0 .5rem}
+#tnext[hidden]{display:none}
 </style>
 </head>
 <body>
 <main>
 <h1>Our Crossword</h1>
+<button id="jump" type="button">Jump to trivia</button>
 <div id="clue" aria-live="polite"></div>
 <div id="grid"></div>
 <div class="bar"><button id="check">Check</button><button id="clear">Clear</button></div>
 <div id="msg" aria-live="polite"></div>
 <div class="lists"><div><h2>Across</h2><ol id="la"></ol></div><div><h2>Down</h2><ol id="ld"></ol></div></div>
+<section id="trivia"><h2>Trivia</h2><div class="tstat"><span id="tprog"></span><span id="tscore"></span></div><p id="tq"></p><div id="ta"></div><p id="tfb" aria-live="polite"></p><button id="tnext" type="button" hidden>Next question</button></section>
 </main>
 <script>
-const D={"rows": 9, "cols": 10, "words": [{"w": "SHAVASANA", "r": 7, "c": 0, "d": "A", "n": 9, "clue": "Corpse pose, the final resting pose in yoga"}, {"w": "CHEESE", "r": 3, "c": 0, "d": "D", "n": 5, "clue": "Say this when the camera comes out"}, {"w": "CHUBBY", "r": 3, "c": 0, "d": "A", "n": 5, "clue": "Round and cuddly"}, {"w": "LOVE", "r": 5, "c": 3, "d": "D", "n": 7, "clue": "What this puzzle is made with"}, {"w": "JOEY", "r": 0, "c": 5, "d": "D", "n": 1, "clue": "A baby kangaroo"}, {"w": "EMMER", "r": 2, "c": 5, "d": "A", "n": 4, "clue": "Ancient type of wheat"}, {"w": "YOGA", "r": 4, "c": 6, "d": "D", "n": 6, "clue": "Practice of stretching, breathing and balance"}, {"w": "GAME", "r": 0, "c": 7, "d": "D", "n": 2, "clue": "What you’re playing right now"}, {"w": "FRESNO", "r": 1, "c": 0, "d": "A", "n": 3, "clue": "Central California city"}, {"w": "BOOTS", "r": 5, "c": 5, "d": "A", "n": 8, "clue": "Footwear for hiking, or the cat in a fairy tale"}]};
+const D={"rows": 14, "cols": 10, "words": [{"w": "SHAVASANA", "r": 11, "c": 1, "d": "A", "n": 12, "clue": "Very important pose"}, {"w": "ASANA", "r": 9, "c": 7, "d": "D", "n": 10, "clue": "Derived from a Sanskrit word meaning “seat” or “sitting”"}, {"w": "BOOTS", "r": 7, "c": 1, "d": "D", "n": 6, "clue": "feline"}, {"w": "GAME", "r": 10, "c": 5, "d": "D", "n": 11, "clue": "What you’re playing right now"}, {"w": "JOEY", "r": 8, "c": 0, "d": "A", "n": 8, "clue": "ROO?"}, {"w": "CHUBBY", "r": 3, "c": 3, "d": "D", "n": 3, "clue": "Round and cuddly"}, {"w": "YOGA", "r": 8, "c": 9, "d": "D", "n": 9, "clue": "Practice of stretching, breathing and balance"}, {"w": "BLUEMOON", "r": 5, "c": 1, "d": "A", "n": 5, "clue": "5250 N Palm"}, {"w": "EMMER", "r": 3, "c": 5, "d": "D", "n": 4, "clue": "YOU!"}, {"w": "BORSIN", "r": 7, "c": 3, "d": "A", "n": 7, "clue": "Creamy, high-saturated-fat and sodium snack"}, {"w": "LOVE", "r": 13, "c": 2, "d": "A", "n": 13, "clue": "What I feel toward you"}, {"w": "CHEESE", "r": 3, "c": 3, "d": "A", "n": 3, "clue": "If you Eat to much you will fart"}, {"w": "FRESNO", "r": 0, "c": 7, "d": "D", "n": 1, "clue": "Central California city"}, {"w": "FOSTER", "r": 1, "c": 2, "d": "A", "n": 2, "clue": "A Fat Guy"}]};
 const cells={};let active=0,prev=null;
 const gridEl=document.getElementById("grid");
 gridEl.style.gridTemplateColumns="repeat("+D.cols+", 1fr)";
@@ -92,8 +108,12 @@ D.words.map((w,i)=>[w,i]).sort((a,b)=>a[0].n-b[0].n).forEach(([w,i])=>{
   li.addEventListener("click",()=>{active=i;move(wordCells(i)[0]);render();});
   document.getElementById(w.d==="A"?"la":"ld").appendChild(li);});
 const msg=document.getElementById("msg");
-function checkWin(){const all=Object.values(cells);
-  if(all.every(c=>c.input.value===c.ch)){msg.textContent="Solved! Nicely done.";msg.className="ok";}
+function markDone(){
+  const ok=D.words.map((w,i)=>wordCells(i).every(c=>c.input.value===c.ch));
+  Object.values(cells).forEach(c=>c.el.classList.toggle("done",c.words.some(i=>ok[i])));
+  document.querySelectorAll("li").forEach(li=>li.classList.toggle("done",ok[+li.dataset.i]));}
+function checkWin(){markDone();const all=Object.values(cells);
+  if(all.every(c=>c.input.value===c.ch)){msg.textContent="YAY, You are smart!";msg.className="ok";}
   else if(msg.className==="ok"){msg.textContent="";msg.className="";}}
 document.getElementById("check").addEventListener("click",()=>{
   let bad=0;Object.values(cells).forEach(c=>{const w=c.input.value&&c.input.value!==c.ch;c.el.classList.toggle("wrong",!!w);if(w)bad++;});
@@ -101,7 +121,28 @@ document.getElementById("check").addEventListener("click",()=>{
   else if(bad){msg.textContent=bad+" wrong "+(bad===1?"letter is":"letters are")+" marked in red.";msg.className="";}
   checkWin();});
 document.getElementById("clear").addEventListener("click",()=>{
-  Object.values(cells).forEach(c=>{c.input.value="";c.el.classList.remove("wrong");});msg.textContent="";msg.className="";});
+  Object.values(cells).forEach(c=>{c.input.value="";c.el.classList.remove("wrong");});msg.textContent="";msg.className="";markDone();});
+const TQ=[
+ {q:"What is the capital of India?",c:["Mumbai","New Delhi","Kolkata","Bengaluru"],a:1},
+ {q:"What is the best rated restaurant in Fresno?",c:["Yosemite Ranch","Pismo's","Heirloom","FocacciaFresno"],a:2},
+ {q:"Which dog can run up to 32 mph and has a bite force around 238 to 291+ psi?",c:["Labrador Retriever","Chihuahua","German Shepherd","Poodle"],a:2},
+ {q:"About how many people practice yoga worldwide?",c:["300 million","30 million","100 million","1 billion"],a:0},
+ {q:"What is the 5th closest planet to the Sun?",c:["Mars","Jupiter","Saturn","Uranus"],a:1},
+ {q:"What is Shavasana also known as?",c:["Cobra pose","Tree pose","Child’s pose","Corpse pose"],a:3}
+];
+let ti=0,ts=0;
+const tqEl=document.getElementById("tq"),taEl=document.getElementById("ta"),tfb=document.getElementById("tfb"),tnext=document.getElementById("tnext"),tprog=document.getElementById("tprog"),tscore=document.getElementById("tscore");
+function tShow(){const it=TQ[ti];tprog.textContent="Question "+(ti+1)+" of "+TQ.length;tscore.textContent="Score: "+ts;tqEl.textContent=it.q;tfb.textContent="";tnext.hidden=true;taEl.innerHTML="";
+ it.c.forEach((t,i)=>{const b=document.createElement("button");b.type="button";b.textContent=t;b.addEventListener("click",()=>tPick(i));taEl.appendChild(b);});}
+function tPick(i){const it=TQ[ti],bs=taEl.querySelectorAll("button");bs.forEach(b=>b.disabled=true);bs[it.a].classList.add("correct");
+ if(i===it.a){ts++;tfb.textContent="Correct!";}else{bs[i].classList.add("wrong");tfb.textContent="Not quite.";}
+ tscore.textContent="Score: "+ts;tnext.textContent=ti===TQ.length-1?"See results":"Next question";tnext.hidden=false;}
+tnext.addEventListener("click",()=>{
+ if(ti>=TQ.length){ti=0;ts=0;tShow();}
+ else if(ti===TQ.length-1){tprog.textContent="All done";tqEl.textContent="You got "+ts+" out of "+TQ.length+".";taEl.innerHTML="";tfb.textContent="";tnext.textContent="Play again";ti=TQ.length;}
+ else{ti++;tShow();}});
+document.getElementById("jump").addEventListener("click",()=>document.getElementById("trivia").scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"}));
+tShow();
 render();
 </script>
 </body>
