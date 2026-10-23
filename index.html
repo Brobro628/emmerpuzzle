@@ -128,7 +128,23 @@ const TQ=[
  {q:"Which dog can run up to 32 mph and has a bite force around 238 to 291+ psi?",c:["Labrador Retriever","Chihuahua","German Shepherd","Poodle"],a:2},
  {q:"About how many people practice yoga worldwide?",c:["300 million","30 million","100 million","1 billion"],a:0},
  {q:"What is the 5th closest planet to the Sun?",c:["Mars","Jupiter","Saturn","Uranus"],a:1},
- {q:"What is Shavasana also known as?",c:["Cobra pose","Tree pose","Child’s pose","Corpse pose"],a:3}
+ {q:"What is Shavasana also known as?",c:["Cobra pose","Tree pose","Child’s pose","Corpse pose"],a:3},
+ // Dinosaurs (medium)
+ {q:"Which dinosaur had large bony back plates and a spiked tail, and lived in the Late Jurassic?",c:["Triceratops","Stegosaurus","Velociraptor","Spinosaurus"],a:1},
+ {q:"Which of these dinosaurs lived closer in time to us today than to Stegosaurus?",c:["Tyrannosaurus rex","Brachiosaurus","Allosaurus","Diplodocus"],a:0},
+ {q:"What does the name “Triceratops” mean?",c:["Three-horned face","Terrible lizard","Swift thief","Armored shield"],a:0},
+ {q:"Real Velociraptors were about the size of a:",c:["Horse","Turkey","Elephant","Grizzly bear"],a:1},
+ // Engineering (medium to hard)
+ {q:"Which material property describes how much a material can stretch or deform under tension before it breaks?",c:["Hardness","Ductility","Brittleness","Density"],a:1},
+ {q:"The individual members of an ideal truss mainly carry which kind of load?",c:["Bending only","Torsion","Axial tension and compression","Shear only"],a:2},
+ {q:"On a stress-strain curve, which point marks where a material starts to deform permanently?",c:["Ultimate strength","Yield point","Fracture point","Elastic modulus"],a:1},
+ {q:"The 1940 collapse of the Tacoma Narrows Bridge is mainly blamed on:",c:["An earthquake","Aeroelastic flutter","Corroded cables","Too much traffic"],a:1},
+ // Electricity (hard)
+ {q:"A 12 V battery pushes 3 A through a resistor. How much power does the resistor dissipate?",c:["4 W","15 W","36 W","144 W"],a:2},
+ {q:"Three 6 Ω resistors are connected in parallel. What is the equivalent resistance?",c:["18 Ω","6 Ω","3 Ω","2 Ω"],a:3},
+ {q:"What is the time constant of a series RC circuit?",c:["R ÷ C","R × C","R + C","1 ÷ (R × C)"],a:1},
+ {q:"Which law says the total current flowing into a node equals the total current flowing out?",c:["Ohm’s law","Kirchhoff’s current law","Faraday’s law","Lenz’s law"],a:1},
+ {q:"A sine-wave AC voltage has a peak of about 170 V. What is its approximate RMS value?",c:["85 V","120 V","170 V","240 V"],a:1}
 ];
 let ti=0,ts=0;
 const tqEl=document.getElementById("tq"),taEl=document.getElementById("ta"),tfb=document.getElementById("tfb"),tnext=document.getElementById("tnext"),tprog=document.getElementById("tprog"),tscore=document.getElementById("tscore");
